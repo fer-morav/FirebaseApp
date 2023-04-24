@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "960957017963",
+    "project_id": "fir-app-d6d79",
+    "storage_bucket": "fir-app-d6d79.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:960957017963:android:463b21bfa7fe3d0cd1e62e",
+        "android_client_info": {
+          "package_name": "com.morav.firebaseapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "960957017963-epf28a4oq40t6b505qr1649i60m2vslm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.morav.firebaseapp",
+            "certificate_hash": "51a327e02c3e28dbc002a5ac90fec28029847d0d"
+          }
+        },
+        {
+          "client_id": "960957017963-5svnajbpciagb05vle48g048lvl4t06d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyByyze6M6rES_hZCWUhEnSXZS9TmcYYzeo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "960957017963-5svnajbpciagb05vle48g048lvl4t06d.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
