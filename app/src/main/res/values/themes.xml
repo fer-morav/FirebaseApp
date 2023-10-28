@@ -16,6 +16,14 @@
 
     <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowBackground">@drawable/ic_splash_background</item>
-        <item name="android:statusBarColor">?attr/colorPrimary</item>
     </style>
+
+    <style name="Theme.FirebaseApp.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.FirebaseApp.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.FirebaseApp.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

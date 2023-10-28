@@ -1,4 +1,4 @@
-package com.morav.firebaseapp.data
+package com.morav.firebaseapp.util
 
 /**
  * A generic class that holds a value with its loading status.

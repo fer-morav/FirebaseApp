@@ -5,11 +5,11 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.login.LoginActivity">
+    tools:context=".ui.signup.SignupActivity">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolBarSignIn"
-        style="@style/ToolbarFirebase"
+        android:id="@+id/toolBarSignUp"
+        style="@style/ToolbarFirebase.Back"
         android:layout_width="match_parent"
         app:title="@string/app_name"
         android:layout_height="?attr/actionBarSize"
@@ -24,11 +24,30 @@
         android:textStyle="bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/action_sign_in"
+        android:text="@string/action_sign_up"
         android:layout_marginTop="32dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolBarSignIn"/>
+        app:layout_constraintTop_toBottomOf="@id/toolBarSignUp"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/name"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/prompt_name"
+        android:layout_marginVertical="32dp"
+        android:layout_marginHorizontal="32dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvTitle" >
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName|textCapWords"/>
+    </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/email"
@@ -40,7 +59,7 @@
         android:layout_marginHorizontal="32dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvTitle" >
+        app:layout_constraintTop_toBottomOf="@+id/name" >
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etEmail"
@@ -73,14 +92,14 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-        android:id="@+id/btLogin"
+        android:id="@+id/btSignUp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="start"
         android:layout_marginVertical="32dp"
         android:layout_marginHorizontal="32dp"
         android:enabled="false"
-        android:text="@string/action_sign_in"
+        android:text="@string/action_sign_up"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/password" />
@@ -96,21 +115,7 @@
         tools:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btLogin" />
-
-    <Button
-        android:id="@+id/btLoginGoogle"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="start"
-        android:layout_marginVertical="32dp"
-        android:layout_marginHorizontal="32dp"
-        android:text="@string/action_sign_in_google"
-        android:drawableLeft="@drawable/google_logo"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loading" />
+        app:layout_constraintTop_toBottomOf="@+id/btSignUp" />
 
     <com.google.android.material.divider.MaterialDivider
         android:id="@+id/divider"
@@ -121,16 +126,18 @@
         android:layout_marginTop="32dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btLoginGoogle" />
+        app:layout_constraintTop_toBottomOf="@id/loading" />
 
     <Button
-        android:id="@+id/btSingUp"
+        android:id="@+id/btSignUpGoogle"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="start"
         android:layout_marginVertical="32dp"
         android:layout_marginHorizontal="32dp"
-        android:text="@string/action_sign_up"
+        android:text="@string/action_sign_up_google"
+        android:drawableLeft="@drawable/google_logo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider" />

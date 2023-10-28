@@ -1,21 +1,23 @@
 package com.morav.firebaseapp.ui.login
 
-import android.app.Activity
-import android.content.res.Configuration
+import android.content.Intent
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
-import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
+import androidx.core.widget.addTextChangedListener
 import com.morav.firebaseapp.R
 import com.morav.firebaseapp.databinding.ActivityLoginBinding
-import com.morav.firebaseapp.util.afterTextChanged
+import com.morav.firebaseapp.domain.factory.ViewModelFactory
+import com.morav.firebaseapp.ui.home.HomeActivity
+import com.morav.firebaseapp.ui.login.viewmodel.LoginViewModel
+import com.morav.firebaseapp.ui.signup.SignupActivity
+import com.morav.firebaseapp.util.changeNightMode
+import com.morav.firebaseapp.util.hideKeyboard
+import com.morav.firebaseapp.util.isDark
 
 class LoginActivity : AppCompatActivity() {
 
@@ -26,108 +28,107 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        loginViewModel = ViewModelProvider(this, LoginViewModelFactory())[LoginViewModel::class.java]
-
+        loginViewModel = ViewModelProvider(this, ViewModelFactory())[LoginViewModel::class.java]
 
         subscribeObserver()
-        changeMode()
         handleUI()
     }
 
     private fun subscribeObserver() = with(binding) {
         loginViewModel.loginFormState.observe(this@LoginActivity, Observer {
             val loginState = it ?: return@Observer
+            btLogin.isEnabled = loginState.isDataValid
 
-            // disable login button unless both username / password is valid
-            login.isEnabled = loginState.isDataValid
-
-            if (loginState.usernameError != null) {
-                username.error = getString(loginState.usernameError)
+            email.error = if (loginState.emailError != null) {
+                getString(loginState.emailError)
+            } else {
+                null
             }
-            if (loginState.passwordError != null) {
-                password.error = getString(loginState.passwordError)
+
+            password.error = if (loginState.passwordError != null) {
+                getString(loginState.passwordError)
+            } else {
+                null
             }
         })
 
         loginViewModel.loginResult.observe(this@LoginActivity, Observer {
             val loginResult = it ?: return@Observer
 
-            loading.visibility = View.GONE
+            hideProgressBar()
             if (loginResult.error != null) {
                 showLoginFailed(loginResult.error)
             }
             if (loginResult.success != null) {
                 updateUiWithUser(loginResult.success)
             }
-            setResult(Activity.RESULT_OK)
-
-            //Complete and destroy login activity once successful
-            finish()
         })
     }
 
     private fun handleUI() = with(binding) {
-        username.afterTextChanged {
+        toolBarSignIn.setOnMenuItemClickListener { item ->
+            if (item.itemId == R.id.switchMode) {
+                delegate.changeNightMode(isDark())
+            }
+            true
+        }
+        etEmail.addTextChangedListener {
             loginViewModel.loginDataChanged(
-                username.text.toString(),
-                password.text.toString()
+                etEmail.text.toString(),
+                etPassword.text.toString()
             )
         }
-        password.apply {
-            afterTextChanged {
+        etPassword.apply {
+            addTextChangedListener {
                 loginViewModel.loginDataChanged(
-                    username.text.toString(),
-                    password.text.toString()
+                    etEmail.text.toString(),
+                    etPassword.text.toString()
                 )
             }
             setOnEditorActionListener { _, actionId, _ ->
                 when (actionId) {
-                    EditorInfo.IME_ACTION_DONE ->
-                        loginViewModel.login(
-                            username.text.toString(),
-                            password.text.toString()
-                        )
+                    EditorInfo.IME_ACTION_DONE -> {
+                        hideKeyboard()
+                    }
                 }
-                false
+                true
             }
         }
-        login.setOnClickListener {
-            loading.visibility = View.VISIBLE
-            loginViewModel.login(username.text.toString(), password.text.toString())
+        btLogin.setOnClickListener {
+            hideKeyboard()
+            showProgressBar()
+            loginViewModel.login(etEmail.text.toString(), etPassword.text.toString())
+        }
+        btSingUp.setOnClickListener {
+            goToSignUp()
         }
     }
 
-    private fun changeMode() = with(binding){
-        toolBarSignup?.setOnMenuItemClickListener { item ->
-            if (item.itemId == R.id.switchMode) {
-                if (isDark()) {
-                    AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO)
-                } else {
-                    AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES)
-                }
-                delegate.applyDayNight()
-            }
-            true
-        }
+    private fun showProgressBar() = with(binding) {
+        btLogin.visibility = View.GONE
+        loading.visibility = View.VISIBLE
     }
 
-    private fun isDark() : Boolean {
-        return this.resources.configuration.uiMode and
-                Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
+    private fun hideProgressBar() = with(binding) {
+        loading.visibility = View.GONE
+        btLogin.visibility = View.VISIBLE
     }
 
-    private fun updateUiWithUser(model: LoggedInUserView) {
-        val welcome = getString(R.string.welcome)
-        val displayName = model.displayName
-        // TODO : initiate successful logged in experience
+    private fun updateUiWithUser(model: String) {
         Toast.makeText(
             applicationContext,
-            "$welcome $displayName",
+            "${getString(R.string.welcome)} $model",
             Toast.LENGTH_LONG
         ).show()
+        startActivity(Intent(this, HomeActivity::class.java))
+        finish()
     }
 
-    private fun showLoginFailed(@StringRes errorString: Int) {
+    private fun goToSignUp() {
+        startActivity(Intent(this, SignupActivity::class.java))
+    }
+
+    private fun showLoginFailed(errorString: String) {
         Toast.makeText(applicationContext, errorString, Toast.LENGTH_SHORT).show()
     }
 }
